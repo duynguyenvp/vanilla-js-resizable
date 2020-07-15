@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #d1d1d1;
+        }
+
+        .resizable {
+            position: relative;
+            box-sizing: border-box;
+            border-radius: 2px;
+            border: none;
+            background: yellow;
+            min-width: 100px;
+            min-height: 100px;
+        }
+
+        .resizable:hover {
+            outline: 2px solid green;
+        }
+
+        .resizer {
+            position: absolute;
+            background-color: green;
+            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+        }
+
+        .resizer {
+            top: calc(100% - 5px);
+            right: -5px;
+            cursor: nw-resize;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="resizable">
+        <div class="resizer"></div>
+    </div>
+    <script>
+        const resizer = document.querySelector('.resizer')
+        var resizable = document.querySelector('.resizable');
+        resizer.addEventListener('mousedown', initDrag, false);
+        const minWidth = 100
+        const minHeight = 100
+        var startX, startY, startWidth, startHeight;
+        function initDrag(e) {
+            startX = e.clientX;
+            startY = e.clientY;
+            startWidth = parseInt(document.defaultView.getComputedStyle(resizable).width, 10);
+            startHeight = parseInt(document.defaultView.getComputedStyle(resizable).height, 10);
+            document.documentElement.addEventListener('mousemove', doDrag, false);
+            document.documentElement.addEventListener('mouseup', stopDrag, false);
+        }
+
+        function doDrag(e) {
+            const nextWidth = startWidth + e.clientX - startX
+            const nextHeight = startHeight + e.clientY - startY
+            resizable.style.width = Math.max(nextWidth, minWidth) + 'px';
+            resizable.style.height = Math.max(nextHeight, minHeight) + 'px';
+            console.log(startWidth, e, startX, resizable.style.width);
+        }
+
+        function stopDrag(e) {
+            document.documentElement.removeEventListener('mousemove', doDrag, false);
+            document.documentElement.removeEventListener('mouseup', stopDrag, false);
+        }
+
+    </script>
+</body>
+
+</html>
